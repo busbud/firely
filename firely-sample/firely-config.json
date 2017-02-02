@@ -1,0 +1,15 @@
+{
+  "config": [],
+  "feature_flag": [
+    {
+      "key": "feature_flag_1",
+      "default": true
+    }
+  ],
+  "experiment": [
+    {
+      "key": "xp_button_color",
+      "default": "#ff0000"
+    }
+  ]
+}
