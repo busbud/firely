@@ -8,8 +8,8 @@
   ],
   "experiment": [
     {
-      "key": "xp_button_color",
-      "default": "#ff0000"
+      "key": "xp_text_variant",
+      "default": "Firely"
     }
   ]
 }
