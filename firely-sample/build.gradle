@@ -27,7 +27,7 @@ buildscript {
     }
 
     dependencies {
-        classpath group: 'com.busbud.android', name: 'firely', version: '0.1.0'
+        classpath group: 'com.busbud.android', name: 'firely-plugin', version: '0.1.0'
     }
 }
 

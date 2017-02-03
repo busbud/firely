@@ -68,7 +68,7 @@ publishing {
 publishing {
     repositories {
         maven {
-            url "../tools/plugins"
+            url "../localOutput"
         }
     }
 }
