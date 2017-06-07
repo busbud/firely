@@ -13,9 +13,10 @@ This library, integrated in your gradle project, only requires:
 `firely-config.json` file is organized in 3 main sections (for us, but it can have the "names" you want):
 - Feature Flags
 - Config
-- Experiments
+- Experiments (or A/B Tests)
 
-Here is an example of `firely-config.json` (should be in the root directory of your project):
+
+Here is an example of `firely-config.json`:
 ```json
 {
   "config": [
@@ -43,12 +44,12 @@ Here is an example of `firely-config.json` (should be in the root directory of y
 }
 ```
 
-Firely is an Android library that come with a gradle plugin, `firely-plugin`. It will generate a `FirelyConfig.java` file based on the `firely-config.json`, like the `R.java` of android does. The `FirelyConfig.java` will contain Enums that matches the configuration. You can then use these enums on Firely to get `LiveVariable`, `CodeBlock`, `OrderedArrayBlock`.
+Firely is an Android library that come with a gradle plugin, `firely-plugin`. It will generate a `FirelyConfig.java` file based on the `firely-config.json`, like the `R.java` android creates. The `FirelyConfig.java` will contain Enums that match the configuration. You can then use these enums on Firely to get `LiveVariable`, `CodeBlock`, `OrderedArrayBlock`.
 
 
 ### LiveVariable
 
-Let's imagine I am using Remote Config to restrict my user to an Android minimum version on which they can run (otherwise they have to update the app). With Firely, I can instantiate a LiveVariable that will point on this flag:
+Let's imagine I am using Remote Config to restrict my user to a minimum Android version on which they can run (otherwise they have to update the app). With Firely, I can instantiate a LiveVariable that will use this setting:
 
 ```java
 LiveVariable<Integer> minAndroidRemoteVersion = Firely.integerVariable(FirelyConfig.Config.ANDROID_VERSION_CODE_MIN);
@@ -73,7 +74,7 @@ if (Firely.booleanVariable(FirelyConfig.FeatureFlag.REFER_A_FRIEND).get()) {
 
 ### CodeBlock
 
-Now I need to do an XP that will change the text of a button.
+Now I need to build out an XP that will change the text of a button.
 
 ```java
 Firely.codeBlock(Remote.Experiment.XP_BUTTON)
@@ -84,14 +85,14 @@ Firely.codeBlock(Remote.Experiment.XP_BUTTON)
 	() -> advance.setText(getString(R.string.bb_payment_cta_3))); // no_price
 ```
 
-Note here: we are always using "control" has the default and control for XPs.
+> NOTE: we are always using "control" as the default value and as the control group for A/B Tests.
 
 
 ### OrderedArrayBlock
 
-At Busbud, we are using a lot of blocks and lists. Let's imagine you got n blocks of data in a page.
-You want to A/B test which one should go first and in which order.
-A basic approach could be to have n! variants.
+In the [Busbud Android App](https://play.google.com/store/apps/details?id=com.busbud.android), we use a lot of blocks and lists. Let's imagine you have *N* blocks of data in a page.
+You want to A/B test which one should go first and the order for all the others.
+A basic approach could be to have *N!* variants.
 
 If we have three items: 1-2-3, 2-1-3, 2-3-1, 1-3-2, 3-2-1, 3-1-2
 
@@ -116,7 +117,7 @@ Firely.codeBlock(Remote.Experiment.XP_BUTTON)
 ```
 Really inefficient.
 
-Another approach is to use OrderArrayBlock. You will use one firebase entry:
+Another approach is to use OrderedArrayBlock. You will use one Firebase entry:
 
 ```json
 {
@@ -138,28 +139,28 @@ OrderedArrayBlock mCheckoutXp =
 			.addStep("three", () -> addThree());
 ```
 
-And you can control your XPs from the Firebase Remote Config dashboard with changing the `xp_mypage_order` key.
+And you can control your A/B Tests from the Firebase Remote Config dashboard by changing the `xp_mypage_order` key.
 
-`three,one,two` will them call `addThree()`, `addOne()`, `addTwo()`.
+`three,one,two` will then call `addThree()`, `addOne()`, `addTwo()`. You can use this to remotely control the order of lists.
 
-### Analytics
+## Analytics
 
-One of the hightlight of Firebase is that everything is working together. In the [documentation](https://firebase.google.com/docs/remote-config/config-analytics), Firebase propose to put the values, manually, as User Property:
+One of the highlights of Firebase is that everything is working together. In the [documentation](https://firebase.google.com/docs/remote-config/config-analytics), Firebase proposes putting the values, manually, as a User Property:
 
 ```java
 String experiment1_variant = FirebaseRemoteConfig.getInstance().getString("experiment1");
    AppMeasurement.getInstance(context).setUserProperty("MyExperiment",experiment1_variant);
 ```
 
-Which is nice, but does not fit our needs. Putting the property at the user level will be erased with time and we will lose the informations. At Busbud, we prefer to tag all the events with all the experiments that have been applied at the time the event is triggered.
+That's nice, but it does not fit our needs. Putting the property at the user level means it will be erased over time and we will lose the information. Instead, we prefer to tag all the events with all the experiments that have been applied at the time the event is triggered.
 
-We added a method on Firely:
+We added a method on Firely to help with this:
 
 ```java
 Firely.getAllPropsWithCurrentValue()
 ```
-And this method is called each time we are sending an event and merge to the property list. 
-Therefore we can track the change of config in time.
+And this method is called each time we send an event and merged into the property list. 
+Therefore we can track the configuration changes over time.
 
 
 ## Use in the project
