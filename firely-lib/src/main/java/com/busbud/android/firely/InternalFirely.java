@@ -26,17 +26,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.smaspe.iterables.FuncIter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 class InternalFirely {
 
@@ -49,6 +52,8 @@ class InternalFirely {
     private boolean mDebugMode;
 
     InternalFirely(Context context, IFirelyConfig firelyConfig) {
+        FirebaseApp.initializeApp(context);
+
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         mConfig = firelyConfig;
@@ -105,7 +110,7 @@ class InternalFirely {
                         defaults.put(value.getName(), value.getDefault());
                     }
                 });
-        mFirebaseRemoteConfig.setDefaults(defaults);
+        mFirebaseRemoteConfig.setDefaultsAsync(defaults);
 
         // Init tracking properties from FirebaseRemoteConfig for tracking
         updateAllTrackingProperties();
@@ -133,9 +138,8 @@ class InternalFirely {
 
     void setDebugMode(boolean debugMode) {
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(debugMode)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettings(configSettings);
+                .setMinimumFetchIntervalInSeconds(debugMode ? 0 : TimeUnit.HOURS.toSeconds(12)).build();
+        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
         mDebugMode = debugMode;
     }
 
@@ -150,7 +154,7 @@ class InternalFirely {
 
         // If in developer mode cacheExpiration is set to 0 so each fetch will retrieve values from
         // the server.
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+        if (mDebugMode) {
             cacheExpiration = 0;
         }
 
@@ -181,7 +185,7 @@ class InternalFirely {
         if (Firely.logLevel().debugLogEnabled()) {
             Log.d(LOG_TAG, "Fetch Activated");
         }
-        mFirebaseRemoteConfig.activateFetched();
+        mFirebaseRemoteConfig.activate();
         updateAllTrackingProperties();
     }
 

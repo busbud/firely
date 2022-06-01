@@ -38,12 +38,13 @@ class FirelyPlugin implements Plugin<Project> {
         // Add generated source
         android.applicationVariants.all { BaseVariant variant ->
             File sourceFolder = new File(project.buildDir, "/generated/source/firely/${variant.dirName}")
-            def configFile = new File(FILE_NAME)
+            def configFile = new File("${project.projectDir.absolutePath}/$FILE_NAME")
+
             if (!configFile.exists()) {
-                configFile = new File("./${project.name}/${FILE_NAME}")
+                configFile = new File("${project.projectDir.absolutePath}/${project.name}/${FILE_NAME}")
             }
             if (!configFile.exists()) {
-                println("Unable to find ${FILE_NAME} in your project")
+                println("Unable to find ${configFile.absolutePath} in your project")
                 return
             }
             def firelyTask = project.task(type: FirelyTask, "${TASK_NAME}${variant.name.capitalize()}") {

@@ -23,6 +23,8 @@ package com.busbud.android.firely;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.google.firebase.FirebaseApp;
+
 import java.util.Map;
 
 public class Firely {

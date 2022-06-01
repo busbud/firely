@@ -9,6 +9,8 @@ This library, integrated in your gradle project, only requires:
 - A `firely-config.json` file that will contains the type of items, the keys, and the default value
 - A call to `Firely.setup(Context context)` from the `Application.onCreate()` method
 - One proguard rule
+- Set `apply plugin: 'com.google.gms.google-services'` in your build.gradle file
+- Make sure you have a `google-services.json` provided by Firebase in your project
 
 `firely-config.json` file is organized in 3 main sections (for us, but it can have the "names" you want):
 - Feature Flags
@@ -157,7 +159,7 @@ That's nice, but it does not fit our needs. Putting the property at the user lev
 We added a method on Firely to help with this:
 
 ```java
-Firely.getAllPropsWithCurrentValue()
+Firely.getCurrentKnownValues()
 ```
 And this method is called each time we send an event and merged into the property list. 
 Therefore we can track the configuration changes over time.
@@ -176,7 +178,7 @@ buildscript {
     }
 
     dependencies {
-        classpath group: 'com.busbud.android', name: 'firely-plugin', version: '0.1.0'
+        classpath group: 'com.busbud.android', name: 'firely-plugin', version: '0.2.0'
     }
 }
 
@@ -186,6 +188,6 @@ apply plugin: 'com.busbud.android.firely'
 
 You also need to import the aar (TODO integrate in maven repo):
 
-`compile project(':firely-0.1.0')`
+`compile project(':firely-0.2.0')`
 
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "322776987125",
+    "project_id": "firely-sample-e6bf6",
+    "storage_bucket": "firely-sample-e6bf6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322776987125:android:39ffdab04f0aa1ff571cbc",
+        "android_client_info": {
+          "package_name": "com.busbud.android.firely.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322776987125-ohnrh0g226a1f7f5cee4c0u2r82kse6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB32UvsyfhQMUnprLbJm53y9BVw1-S8j-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322776987125-ohnrh0g226a1f7f5cee4c0u2r82kse6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
