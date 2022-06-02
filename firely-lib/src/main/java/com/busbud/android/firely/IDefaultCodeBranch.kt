@@ -18,17 +18,8 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely.sample;
+package com.busbud.android.firely
 
-import android.app.Application;
-
-import com.busbud.android.firely.Firely;
-
-public class MainApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Firely.setup(this).setDebugMode(BuildConfig.DEBUG);
-    }
+interface IDefaultCodeBranch {
+    fun execute()
 }

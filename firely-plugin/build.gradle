@@ -28,7 +28,7 @@ dependencies {
 
     implementation gradleApi()
     implementation localGroovy()
-    implementation 'com.android.tools.build:gradle:7.2.1'
+    implementation "com.android.tools.build:gradle:$gradle_version"
     implementation 'com.sun.codemodel:codemodel:2.6'
 }
 
@@ -43,7 +43,7 @@ tasks.withType(GroovyCompile) {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier.set("sources")
     from sourceSets.main.allSource
 }
 

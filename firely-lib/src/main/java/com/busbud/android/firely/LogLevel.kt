@@ -18,8 +18,18 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-public interface IFirelyConfig {
-    IFirelyItem[] allValues();
+ enum class LogLevel {
+    NONE,
+    DEBUG,
+    ERROR;
+
+    fun debugLogEnabled() : Boolean {
+        return this.ordinal == DEBUG.ordinal
+    }
+
+    fun errorLogEnabled() : Boolean {
+        return this.ordinal >= DEBUG.ordinal
+    }
 }

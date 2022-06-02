@@ -93,17 +93,17 @@ class FirelyTask extends DefaultTask {
                         def enumName, Object jsonArray, JArray allValues) {
         if (jsonArray.size() == 0) {
             // Do nothing
-            return;
+            return
         }
         def enumClass = configClass._class(PUBLIC, enumName, ClassType.ENUM)
         enumClass._implements(firelyItem)
 
         def name = enumClass.field(PRIVATE | FINAL, String.class, "mName")
-        def defaultValue = enumClass.field(PRIVATE | FINAL, java.lang.Object.class, "mDefault")
+        def defaultValue = enumClass.field(PRIVATE | FINAL, Object.class, "mDefault")
 
         def constructor = enumClass.constructor(PRIVATE)
         def param1 = constructor.param(String.class, "name")
-        def param2 = constructor.param(java.lang.Object.class, "defaultValue")
+        def param2 = constructor.param(Object.class, "defaultValue")
 
         def body = constructor.body()
         body.assign(_this().ref(name), param1)
@@ -113,7 +113,7 @@ class FirelyTask extends DefaultTask {
         getNameMethod.annotate(Override.class)
         getNameMethod.body()._return(name)
 
-        def getDefaultMethod = enumClass.method(PUBLIC, java.lang.Object.class, "getDefault")
+        def getDefaultMethod = enumClass.method(PUBLIC, Object.class, "getDefault")
         getDefaultMethod.annotate(Override.class)
         getDefaultMethod.body()._return(defaultValue)
 

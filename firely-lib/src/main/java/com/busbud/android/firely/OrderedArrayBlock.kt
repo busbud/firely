@@ -18,48 +18,47 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-import android.util.Log;
+import android.util.Log
 
-import java.util.HashMap;
+private const val SEPARATOR = ","
 
-public class OrderedArrayBlock extends Operation {
+class OrderedArrayBlock(
+    name: String,
+    internalConfig: InternalFirely
+) : Operation(name, internalConfig) {
 
-    private static final String SEPERATOR = ",";
+    private val steps: HashMap<String, ICodeBranch> = HashMap()
+    private var separator: String = SEPARATOR
 
-    private HashMap<String, ICodeBranch> mSteps = new HashMap<>();
-    private String mSeparator = SEPERATOR;
 
-    OrderedArrayBlock(String name, InternalFirely internalFirely) {
-        super(name, internalFirely);
+    fun initSeparator(separator: String): OrderedArrayBlock {
+        this.separator = separator
+        return this
     }
 
-    public OrderedArrayBlock initSeparator(String separator) {
-        mSeparator = separator;
-        return this;
+    fun addStep(key: String, branch: ICodeBranch): OrderedArrayBlock {
+        steps[key] = branch
+        return this
     }
 
-    public OrderedArrayBlock addStep(String key, ICodeBranch branch) {
-        mSteps.put(key, branch);
-        return this;
-    }
-
-    public void execute() {
-        if (mSteps == null || mSteps.size() == 0) {
-            return;
+    fun execute() {
+        if (steps.size == 0) {
+            return
         }
-        String arrayVariant = getInternalFirely().getString(getName());
-        String[] variants = arrayVariant.split(mSeparator);
-        for (String variant : variants) {
-            String cleanVariant = variant.trim();
-            ICodeBranch toExec = mSteps.get(cleanVariant);
+
+        val arrayVariant: String = internalFirely.getString(name)
+        val variants: List<String> = arrayVariant.split(separator)
+        variants.forEach {
+            val cleanVariant = it.trim()
+            val toExec: ICodeBranch? = steps[cleanVariant]
             if (toExec == null) {
                 if (Firely.logLevel().errorLogEnabled()) {
-                    Log.e(OrderedArrayBlock.class.getSimpleName(), "Unknown values in " + getName());
+                    Log.e(OrderedArrayBlock::class.simpleName, "Unknown values in $name")
                 }
             } else {
-                toExec.execute();
+                toExec.execute()
             }
         }
     }

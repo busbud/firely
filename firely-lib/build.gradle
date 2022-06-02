@@ -19,15 +19,16 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "33.0.0-rc4"
+    compileSdk compilesdk_version
+    buildToolsVersion = buildtools_version
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 32
+        targetSdkVersion compilesdk_version
         versionCode 1
         versionName "1.0"
     }
@@ -46,7 +47,9 @@ android {
 
 dependencies {
     implementation 'com.google.firebase:firebase-config:21.1.0'
-    implementation 'com.github.smaspe:iterables:0.3.0'
+    implementation "androidx.core:core-ktx:$corektx_version"
+    implementation "androidx.preference:preference-ktx:1.2.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 task sourceJar(type: Jar) {

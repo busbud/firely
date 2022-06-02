@@ -18,8 +18,9 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-public interface ICodeBranch {
-    void execute();
+interface IFirelyItem {
+    fun getName() : String
+    fun getDefault() : Any
 }
