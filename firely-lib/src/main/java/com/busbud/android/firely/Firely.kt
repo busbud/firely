@@ -66,18 +66,18 @@ object Firely {
 
     fun codeBlock(name: IFirelyItem): CodeBlock {
         checkSetupCalled()
-        if (name.getName().isEmpty()) {
+        if (name.key.isEmpty()) {
             throw IllegalArgumentException("Empty variable")
         }
-        return CodeBlock(name.getName(), internal)
+        return CodeBlock(name.key, internal)
     }
 
     fun orderedArrayBlock(name: IFirelyItem): OrderedArrayBlock {
         checkSetupCalled()
-        if (name.getName().isEmpty()) {
+        if (name.key.isEmpty()) {
             throw IllegalArgumentException("Empty variable")
         }
-        return OrderedArrayBlock(name.getName(), internal)
+        return OrderedArrayBlock(name.key, internal)
     }
 
     fun doubleVariable(name: IFirelyItem): LiveVariable<Double> {
@@ -102,10 +102,10 @@ object Firely {
 
     private fun <T : Any> variable(name: IFirelyItem, clazz: KClass<T>): LiveVariable<T> {
         checkSetupCalled()
-        if (name.getName().isEmpty()) {
+        if (name.key.isEmpty()) {
             throw  IllegalArgumentException("Empty variable")
         }
-        return LiveVariable(name.getName(), internal, clazz)
+        return LiveVariable(name.key, internal, clazz)
     }
 
     fun getValuesAsMap(): Map<String, String> {

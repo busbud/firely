@@ -85,7 +85,7 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
 
 
         config.allValues()
-            .associate { it.getName() to it.getDefault() }
+            .associate { it.key to it.default}
             .also { defaults ->
                 firebaseRemoteConfig.setDefaultsAsync(defaults)
             }
@@ -169,7 +169,7 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
         allPropsWithCurrentValue.clear()
 
         config.allValues().associate { value ->
-            value.getName() to firebaseRemoteConfig.getString(value.getName())
+            value.key to firebaseRemoteConfig.getString(value.key)
         }.also {
             allPropsWithCurrentValue.putAll(it)
         }

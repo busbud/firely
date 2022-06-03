@@ -20,6 +20,6 @@
 
 package com.busbud.android.firely
 
-interface IDefaultCodeBranch {
+fun interface IDefaultCodeBranch {
     fun execute()
 }

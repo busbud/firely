@@ -30,7 +30,7 @@ private const val TASK_NAME = "firely"
 private const val FILE_NAME = "firely-config.json"
 
 /**
- * Firely plugin that plugs a JavaGeneratingTask in the variants of the application and generate the FirelyConfig.java file
+ * Firely plugin that plugs a JavaGeneratingTask in the variants of the application and generate the FirelyConfig.kt file
  */
 class FirelyPlugin : Plugin<Project> {
 

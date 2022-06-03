@@ -21,6 +21,6 @@
 package com.busbud.android.firely
 
 interface IFirelyItem {
-    fun getName() : String
-    fun getDefault() : Any
+    val default : Any
+    val key : String
 }
