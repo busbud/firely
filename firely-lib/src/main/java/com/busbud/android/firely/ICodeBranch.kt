@@ -18,10 +18,8 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-class SharedPreferencesKey {
-    interface RemoteConfig {
-        String INITIAL_CHECK = "com.busbud.android.firely.initial_check";
-    }
+fun interface ICodeBranch {
+    fun execute()
 }

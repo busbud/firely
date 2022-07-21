@@ -18,50 +18,43 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-import android.util.Log;
+import android.util.Log
 
-import java.util.Arrays;
-import java.util.List;
+class CodeBlock(name: String, internalFirely: InternalFirely) : Operation(name, internalFirely) {
 
-public class CodeBlock extends Operation {
+    private var variant = listOf<String>()
 
-    private List<String> mVariant;
-
-    CodeBlock(String name, InternalFirely internalConfig) {
-        super(name, internalConfig);
+    fun withVariant(vararg keys: String): CodeBlock {
+        variant = keys.toList()
+        return this
     }
 
-    public CodeBlock withVariant(String... keys) {
-        mVariant = Arrays.asList(keys);
-        return this;
-    }
+    fun execute(defaultCodeBranch: IDefaultCodeBranch, vararg branches: ICodeBranch) {
 
-    public void execute(IDefaultCodeBranch defaultCodeBranch, ICodeBranch... branches) {
-        if (defaultCodeBranch == null) {
-            return;
+        if (branches.isEmpty()) {
+            defaultCodeBranch.execute()
+            return
         }
-        if (branches == null) {
-            defaultCodeBranch.execute();
-            return;
-        }
-        if (branches.length != (mVariant != null ? mVariant.size() : 0)) {
+
+        if (branches.size != variant.size) {
             if (Firely.logLevel().errorLogEnabled()) {
-                Log.e(CodeBlock.class.getSimpleName(), "Variants does not match CodeBranches");
+                Log.e(CodeBlock::class.simpleName, "Variants does not match CodeBranches")
             }
             // But continue.
         }
-        String phoneVariant = getInternalFirely().getString(getName());
-        if (mVariant != null && mVariant.contains(phoneVariant)) {
-            int index = mVariant.indexOf(phoneVariant);
-            if (branches.length > index) {
-                branches[index].execute();
+
+        val phoneVariant: String = internalFirely.getString(name)
+        if (variant.contains(phoneVariant)) {
+            val index = variant.indexOf(phoneVariant)
+            if (branches.size > index) {
+                branches[index].execute()
             } else {
-                defaultCodeBranch.execute();
+                defaultCodeBranch.execute()
             }
         } else {
-            defaultCodeBranch.execute();
+            defaultCodeBranch.execute()
         }
     }
 }

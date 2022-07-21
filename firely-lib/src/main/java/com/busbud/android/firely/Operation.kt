@@ -18,8 +18,6 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-public interface ICodeBranch {
-    void execute();
-}
+open class Operation(val name: String, val internalFirely: InternalFirely)

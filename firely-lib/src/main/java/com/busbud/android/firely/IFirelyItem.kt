@@ -18,10 +18,9 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-public interface IFirelyItem {
-    String getName();
-
-    Object getDefault();
+interface IFirelyItem {
+    val default : Any
+    val key : String
 }

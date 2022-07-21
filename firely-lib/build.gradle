@@ -19,19 +19,20 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdk compilesdk_version
+    buildToolsVersion = buildtools_version
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion compilesdk_version
         versionCode 1
         versionName "1.0"
-
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -39,14 +40,16 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.7
-        sourceCompatibility 1.7
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
 dependencies {
-    compile 'com.google.firebase:firebase-config:10.0.1'
-    compile 'com.github.smaspe:iterables:0.3.0'
+    implementation 'com.google.firebase:firebase-config:21.1.0'
+    implementation "androidx.core:core-ktx:$corektx_version"
+    implementation "androidx.preference:preference-ktx:1.2.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 task sourceJar(type: Jar) {
@@ -59,7 +62,7 @@ publishing {
         firely(MavenPublication) {
             groupId 'com.busbud.android'
             artifactId 'firely'
-            version '0.1.0'
+            version '0.2.0'
             artifact(sourceJar)
             artifact("$buildDir/outputs/aar/firely-lib-release.aar")
         }

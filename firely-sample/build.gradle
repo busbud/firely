@@ -19,27 +19,30 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.busbud.android.firely'
+apply plugin: 'com.google.gms.google-services'
 
 buildscript {
     repositories {
+        google()
         mavenLocal()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath group: 'com.busbud.android', name: 'firely-plugin', version: '0.1.0'
+        classpath group: 'com.busbud.android', name: 'firely-plugin', version: '0.2.0'
     }
 }
 
-apply plugin: 'com.busbud.android.firely'
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdk compilesdk_version
+    buildToolsVersion = buildtools_version
+
     defaultConfig {
-        applicationId "com.busbud.android.firely"
+        applicationId "com.busbud.android.firely.sample"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion compilesdk_version
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -53,13 +56,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    testCompile 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.6.0'
+    testImplementation 'junit:junit:4.13.2'
 
-    compile project(':firely-lib')
+    implementation project(':firely-lib')
+    implementation "androidx.core:core-ktx:$corektx_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

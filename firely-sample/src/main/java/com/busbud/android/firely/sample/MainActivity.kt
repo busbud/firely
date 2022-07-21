@@ -18,8 +18,30 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely.sample
 
-public interface IDefaultCodeBranch {
-    void execute();
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.busbud.android.firely.Firely
+import com.busbud.android.firely.FirelyConfig
+
+
+class MainActivity : AppCompatActivity() {
+
+    private val textXp = Firely.stringVariable(FirelyConfig.Experiment.XP_TEXT_VARIANT)
+    private val featureFlag = Firely.booleanVariable(FirelyConfig.FeatureFlag.FEATURE_FLAG_1)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val view = findViewById<View>(R.id.text_view) as TextView
+        view.visibility = if (featureFlag.get()) View.VISIBLE else View.INVISIBLE
+        view.text = textXp.get()
+    }
 }

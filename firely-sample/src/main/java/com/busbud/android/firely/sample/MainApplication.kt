@@ -18,18 +18,15 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely.sample
 
-public enum LogLevel {
-    NONE,
-    DEBUG,
-    ERROR;
+import android.app.Application
+import com.busbud.android.firely.Firely
 
-    public boolean debugLogEnabled() {
-        return this.ordinal() == DEBUG.ordinal();
-    }
+class MainApplication : Application() {
 
-    public boolean errorLogEnabled() {
-        return this.ordinal() >= DEBUG.ordinal();
+    override fun onCreate() {
+        super.onCreate()
+        Firely.setup(this).setDebugMode(BuildConfig.DEBUG)
     }
 }

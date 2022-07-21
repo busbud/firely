@@ -18,29 +18,8 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely;
+package com.busbud.android.firely
 
-public class LiveVariable<T> extends Operation {
-    private Class<T> mClass;
-
-    LiveVariable(String name, InternalFirely internalConfig, Class<T> clazz) {
-        super(name, internalConfig);
-        mClass = clazz;
-    }
-
-    public T get() {
-        if (mClass.isAssignableFrom(Boolean.class)) {
-            return mClass.cast(getInternalFirely().getBoolean(getName()));
-        } else if (mClass.isAssignableFrom(String.class)) {
-            return mClass.cast(getInternalFirely().getString(getName()));
-        } else if (mClass.isAssignableFrom(Double.class)) {
-            return mClass.cast(getInternalFirely().getDouble(getName()));
-        } else if (mClass.isAssignableFrom(Long.class)) {
-            return mClass.cast(getInternalFirely().getLong(getName()));
-        } else if (mClass.isAssignableFrom(Integer.class)) {
-            // Not supported in Firebase so let's be crazy
-            return mClass.cast(Integer.valueOf(getInternalFirely().getString(getName())));
-        }
-        throw new ClassCastException("Unsupported");
-    }
+interface IFirelyConfig {
+    fun allValues() : Array<IFirelyItem>
 }

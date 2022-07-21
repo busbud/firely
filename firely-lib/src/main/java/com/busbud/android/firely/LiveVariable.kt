@@ -18,17 +18,23 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.busbud.android.firely.sample;
+package com.busbud.android.firely
 
-import android.app.Application;
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
-import com.busbud.android.firely.Firely;
+class LiveVariable<T : Any>(name: String, internalConfig: InternalFirely, private val clazz: KClass<T>) :
+    Operation(name, internalConfig) {
 
-public class MainApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Firely.setup(this).setDebugMode(BuildConfig.DEBUG);
+    fun get(): T = when (clazz) {
+        Boolean::class -> clazz.cast(internalFirely.getBoolean(name))
+        String::class -> clazz.cast(internalFirely.getString(name))
+        Double::class -> clazz.cast(internalFirely.getDouble(name))
+        Long::class -> clazz.cast(internalFirely.getLong(name))
+        Integer::class -> {
+            // Not supported in Firebase so let's be crazy
+            clazz.cast(Integer.valueOf(internalFirely.getString(name)))
+        }
+        else -> throw ClassCastException("Unsupported")
     }
 }
