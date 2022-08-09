@@ -85,7 +85,7 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
 
 
         config.allValues()
-            .associate { it.key to it.default}
+            .associate { it.key to it.default }
             .also { defaults ->
                 firebaseRemoteConfig.setDefaultsAsync(defaults)
             }
@@ -94,9 +94,9 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
         updateAllTrackingProperties()
     }
 
-    fun getString(name: String) : String = firebaseRemoteConfig.getString(name)
+    fun getString(name: String): String = firebaseRemoteConfig.getString(name)
     fun getBoolean(name: String) = firebaseRemoteConfig.getBoolean(name)
-    fun getDouble(name: String) : Double= firebaseRemoteConfig.getDouble(name)
+    fun getDouble(name: String): Double = firebaseRemoteConfig.getDouble(name)
     fun getLong(name: String): Long = firebaseRemoteConfig.getLong(name)
 
     fun getCurrentKnownValues(): Map<String, String> {
@@ -148,6 +148,8 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
                     prefs.edit()
                         .putBoolean(SHARED_PREF_INITIAL_CHECK, true)
                         .apply()
+
+                    activateFetched()
                 } else {
                     if (Firely.logLevel().debugLogEnabled()) {
                         Log.d(LOG_TAG, "Fetch Failed")
