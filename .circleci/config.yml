@@ -68,7 +68,7 @@ jobs:
           cmd: "firely-plugin::publishToMavenLocal"
       - run-gradle-cmd:
           desc: Build Release
-          cmd: "assembleRelease --configuration-cache --stacktrace"
+          cmd: "assembleRelease"
       - *persist_build_workspace
       - store_artifacts:
           path: firely-lib/build/reports
