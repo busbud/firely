@@ -70,6 +70,9 @@ jobs:
       - restore-gradle-cache
       - restore-android-build-cache
       - run-gradle-cmd:
+          desc: Publish Plugin to MavenLocal
+          cmd: "firely-plugin::publishToMavenLocal"
+      - run-gradle-cmd:
           desc: Build Release
           cmd: "assembleRelease"
       - save-gradle-cache

@@ -43,6 +43,12 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -68,3 +74,5 @@ publishing {
         }
     }
 }
+
+
