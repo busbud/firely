@@ -22,6 +22,7 @@ package com.busbud.android.firely.sample
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -40,8 +41,19 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val view = findViewById<View>(R.id.text_view) as TextView
-        view.visibility = if (featureFlag.get()) View.VISIBLE else View.INVISIBLE
-        view.text = textXp.get()
+        fetchDataAndUpdateTextView()
+
+        findViewById<Button>(R.id.button).apply {
+            setOnClickListener {
+                fetchDataAndUpdateTextView()
+            }
+        }
+    }
+
+    private fun fetchDataAndUpdateTextView() {
+        findViewById<TextView>(R.id.text_view).apply {
+            visibility = if (featureFlag.get()) View.VISIBLE else View.INVISIBLE
+            text = textXp.get()
+        }
     }
 }

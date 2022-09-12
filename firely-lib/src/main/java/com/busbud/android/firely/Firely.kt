@@ -25,7 +25,7 @@ import kotlin.reflect.KClass
 
 object Firely {
 
-    private var logLevel = LogLevel.NONE
+    private var logLevel = LogLevel.DEBUG
     private lateinit var internal: InternalFirely
 
     fun setup(context: Context) : Firely {
