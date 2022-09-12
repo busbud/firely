@@ -80,7 +80,7 @@ jobs:
           destination: reports
       - store_artifacts:
           path: firely-plugin/build/reports
-      -store_artifacts:
+      - store_artifacts:
           path: firely-sample/build/reports
 
 
