@@ -7,10 +7,6 @@ orbs:
 # For code reuse.
 #######################
 commands:
-  restore-android-build-cache: android/restore-build-cache
-  save-android-build-cache: android/save-build-cache
-  restore-gradle-cache: android/restore-gradle-cache
-  save-gradle-cache: android/save-gradle-cache
   run-gradle-cmd:
     description: "Running gradle command with environment options"
     parameters:
@@ -67,14 +63,12 @@ jobs:
     <<: *android_config
     steps:
       - checkout
-      - restore-gradle-cache
       - run-gradle-cmd:
           desc: Publish Plugin to MavenLocal
           cmd: "firely-plugin::publishToMavenLocal"
       - run-gradle-cmd:
           desc: Build Release
           cmd: "assembleRelease --configuration-cache --stacktrace"
-      - save-gradle-cache
       - *persist_build_workspace
       - store_artifacts:
           path: firely-lib/build/reports
