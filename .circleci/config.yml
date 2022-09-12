@@ -68,7 +68,6 @@ jobs:
     steps:
       - checkout
       - restore-gradle-cache
-      - restore-android-build-cache
       - run-gradle-cmd:
           desc: Publish Plugin to MavenLocal
           cmd: "firely-plugin::publishToMavenLocal"
@@ -76,7 +75,6 @@ jobs:
           desc: Build Release
           cmd: "assembleRelease --configuration-cache --stacktrace"
       - save-gradle-cache
-      - save-android-build-cache
       - *persist_build_workspace
       - store_artifacts:
           path: firely-lib/build/reports
