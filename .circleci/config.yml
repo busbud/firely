@@ -74,7 +74,7 @@ jobs:
           cmd: "firely-plugin::publishToMavenLocal"
       - run-gradle-cmd:
           desc: Build Release
-          cmd: "assembleRelease"
+          cmd: "assembleRelease --configuration-cache --stacktrace"
       - save-gradle-cache
       - save-android-build-cache
       - *persist_build_workspace
