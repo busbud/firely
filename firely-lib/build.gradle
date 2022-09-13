@@ -68,7 +68,7 @@ publishing {
         firely(MavenPublication) {
             groupId 'com.busbud.android'
             artifactId 'firely'
-            version '0.2.0'
+            version "$lib_version"
             artifact(sourceJar)
             artifact("$buildDir/outputs/aar/firely-lib-release.aar")
         }

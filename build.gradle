@@ -26,6 +26,7 @@ buildscript {
     ext.buildtools_version = '33.0.0'
     ext.corektx_version = '1.7.0'
     ext.compilesdk_version = 32
+    ext.lib_version = '0.2.0'
 
     repositories {
         google()

@@ -18,9 +18,12 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
-apply plugin: 'kotlinx-serialization'
+plugins {
+    id 'kotlin'
+    id 'maven-publish'
+    id 'kotlinx-serialization'
+    id "com.gradle.plugin-publish" version "1.0.0"
+}
 
 dependencies {
     repositories {
@@ -52,15 +55,23 @@ artifacts {
     archives sourcesJar
 }
 
-publishing {
-    publications {
-        main(MavenPublication) {
-            groupId 'com.busbud.android'
-            artifactId 'firely-plugin'
-            version '0.2.0'
+version = "$lib_version"
+group = "com.busbud"
 
-            from components.java
-            artifact sourcesJar
+pluginBundle {
+    website = 'https://github.com/busbud/firely'
+    vcsUrl = 'https://github.com/busbud/firely'
+    description = "Library to simplify the integration and management of A/B testing"
+    tags = ['firely', 'remote_configs', 'firebase']
+}
+
+
+gradlePlugin {
+    plugins {
+        firelyPlugin {
+            id = 'com.busbud.android.firely'
+            implementationClass = 'com.busbud.android.firely.FirelyPlugin'
+            displayName = "Firely Plugin"
         }
     }
 }
