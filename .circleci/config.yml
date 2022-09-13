@@ -66,12 +66,12 @@ jobs:
           cmd: "clean assembleRelease"
       - *persist_build_workspace
       - store_artifacts:
-          path: firely-lib/build/reports
+          path: firely-lib/build/outputs
           destination: reports
       - store_artifacts:
-          path: firely-plugin/build/reports
+          path: firely-plugin/build/outputs
       - store_artifacts:
-          path: firely-sample/build/reports
+          path: firely-sample/build/outputs
 
 
 workflows:
