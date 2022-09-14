@@ -51,6 +51,8 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
+tasks.withType(Copy).all { duplicatesStrategy 'exclude' }
+
 artifacts {
     archives sourcesJar
 }
