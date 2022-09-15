@@ -63,9 +63,6 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
             }
 
             override fun onActivityPaused(activity: Activity) {
-                if (debugMode) {
-                    activateFetched()
-                }
             }
 
             override fun onActivityStopped(activity: Activity) {

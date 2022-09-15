@@ -1,0 +1,81 @@
+version: 2.1
+orbs:
+  android: circleci/android@2.1.2
+
+#######################
+# Commands section
+# For code reuse.
+#######################
+commands:
+  run-gradle-cmd:
+    description: "Running gradle command with environment options"
+    parameters:
+      desc:
+        type: string
+        default: "Running gradle command"
+      cmd:
+        type: string
+    steps:
+      - run:
+          name: << parameters.desc >>
+          command: >
+            ./gradlew -PdisablePreDex -PciBuild=true
+            << parameters.cmd >>
+          no_output_timeout: 30m
+          environment:
+            JVM_OPTS: -Xmx4096m
+            GRADLE_OPTS: >
+              -Xmx1536m -XX:+HeapDumpOnOutOfMemoryError
+              -Dorg.gradle.configureondemand=true
+              -Dkotlin.compiler.execution.strategy=in-process
+              -Dkotlin.incremental=false
+
+references:
+  ## Workspace
+
+  attach_debug_workspace: &attach_build_workspace
+    attach_workspace:
+      at: ~/workspace
+
+  persist_debug_workspace: &persist_build_workspace
+    persist_to_workspace:
+      root: ~/workspace
+      paths:
+        - firely-lib/build
+        - firely-plugin/build
+
+  ## Docker images
+  android_config: &android_config
+    working_directory: ~/workspace
+    docker:
+      - image: circleci/android:api-30
+
+
+jobs:
+  ## Builds release version
+  build:
+    environment:
+    <<: *android_config
+    steps:
+      - checkout
+      - run-gradle-cmd:
+          desc: Publish Plugin to MavenLocal
+          cmd: "firely-plugin::publishToMavenLocal"
+      - run-gradle-cmd:
+          desc: Build Release
+          cmd: "clean assembleRelease"
+      - *persist_build_workspace
+      - store_artifacts:
+          path: firely-lib/build/outputs
+          destination: reports
+      - store_artifacts:
+          path: firely-plugin/build/outputs
+      - store_artifacts:
+          path: firely-sample/build/outputs
+
+
+workflows:
+  workflow:
+    jobs:
+      - build
+

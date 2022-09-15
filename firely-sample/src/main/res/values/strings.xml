@@ -21,4 +21,5 @@
 <resources>
     <string name="app_name">firely</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="refresh">Refresh</string>
 </resources>
