@@ -17,16 +17,15 @@
  * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 buildscript {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
+//        mavenLocal()
     }
-    dependencies {
-        classpath group: 'com.busbud.android', name: 'firely-plugin', version: "$lib_version"
-    }
+//    dependencies {
+//        classpath group: 'com.busbud.android', name: 'firely-plugin', version: "$lib_version"
+//    }
 }
 
 plugins {
