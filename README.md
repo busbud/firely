@@ -183,19 +183,41 @@ can track the configuration changes over time.
 
 ## Use in the project
 
-You need to apply the plugin:
+Load the correct version of the plugin on your top-level build.gradle file:
 
 ```
 plugins {
-  <... all your other plugins ...>
-  id 'com.busbud.android.firely' version '0.2.0'
+    id 'com.busbud.android.firely' version '0.2.1' apply false
 }
 
 ```
+Then apply the plugin without mentioning the version on the modules you need:
+```
+plugins {
+    // other plugins here...
+    id 'com.busbud.android.firely'
+}
+```
 
-You also need to import the aar (TODO integrate in maven repo):
 
-`compile project(':firely-0.2.0')`
+You also need to import the library in your project.
+For that you need to add jitpack.io to your top-level build.gradle file
+```
+allprojects {
+    repositories {
+        // other repositories here ...
+        maven { url 'https://jitpack.io' }
+    }
+
+```
+
+And in the project you want to apply you should add:
+```
+dependencies {
+    // other dependencies here ...
+    implementation 'com.github.busbud:firely:0.2.1'
+}
+```
 
 
 ## If you need to update the plugin on the Gradle Plugin Portal (ADMINS ONLY)
@@ -208,3 +230,12 @@ In order to do this you need to have access to this [account](https://plugins.gr
 ```
 ./gradlew publishPlugins -Pgradle.publish.key=<key> -Pgradle.publish.secret=<secret>
 ```
+
+
+
+## If you need to update the firely lib on Jitpack.io (ADMINS ONLY)
+
+- Bump the version of the library
+- Create a tag with the new version
+- Create a release on Github based on the newly created tag
+- Wait a few seconds and you should see your update [here](https://jitpack.io/#busbud/firely)
