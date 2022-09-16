@@ -22,6 +22,10 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath group: 'com.busbud.android', name: 'firely-plugin', version: "$lib_version"
     }
 }
 
@@ -29,7 +33,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
-    id "com.busbud.android.firely" version "0.2.0"
+    id "com.busbud.android.firely" version "$lib_version"
 }
 
 android {

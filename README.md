@@ -183,20 +183,13 @@ can track the configuration changes over time.
 
 ## Use in the project
 
-You need to apply the plugin (TODO integrate in maven repo):
+You need to apply the plugin:
 
 ```
-buildscript {
-    repositories {
-        mavenLocal()
-    }
-
-    dependencies {
-        classpath group: 'com.busbud.android', name: 'firely-plugin', version: '0.2.0'
-    }
+plugins {
+  <... all your other plugins ...>
+  id 'com.busbud.android.firely' version '0.2.0'
 }
-
-apply plugin: 'com.busbud.android.firely'
 
 ```
 
@@ -205,3 +198,13 @@ You also need to import the aar (TODO integrate in maven repo):
 `compile project(':firely-0.2.0')`
 
 
+## If you need to update the plugin on the Gradle Plugin Portal (ADMINS ONLY)
+
+Currently this process is manual and it is not being done via CI.
+In order to do this you need to have access to this [account](https://plugins.gradle.org/u/android-busbud).
+
+- Bump the version of library
+- Run the following command (keys are available on the account):
+```
+./gradlew publishPlugins -Pgradle.publish.key=<key> -Pgradle.publish.secret=<secret>
+```

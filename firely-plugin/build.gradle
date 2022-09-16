@@ -78,3 +78,16 @@ gradlePlugin {
     }
 }
 
+publishing {
+    publications {
+        main(MavenPublication) {
+            groupId 'com.busbud.android'
+            artifactId 'firely-plugin'
+            version "$lib_version"
+
+            from components.java
+            artifact sourcesJar
+        }
+    }
+}
+
