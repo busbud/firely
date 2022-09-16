@@ -33,7 +33,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
-    id "com.busbud.android.firely" version "$lib_version"
+    id "com.busbud.android.firely" version "0.2.1"
 }
 
 android {
