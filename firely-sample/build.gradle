@@ -18,21 +18,18 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'com.busbud.android.firely'
-apply plugin: 'com.google.gms.google-services'
-
 buildscript {
     repositories {
         google()
-        mavenLocal()
         mavenCentral()
     }
+}
 
-    dependencies {
-        classpath group: 'com.busbud.android', name: 'firely-plugin', version: '0.2.0'
-    }
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'com.google.gms.google-services'
+    id "com.busbud.android.firely" version "0.2.0"
 }
 
 android {
