@@ -59,9 +59,6 @@ jobs:
     steps:
       - checkout
       - run-gradle-cmd:
-          desc: Publish Plugin to MavenLocal
-          cmd: "firely-plugin::publishToMavenLocal"
-      - run-gradle-cmd:
           desc: Build Release
           cmd: "clean assembleRelease"
       - *persist_build_workspace
