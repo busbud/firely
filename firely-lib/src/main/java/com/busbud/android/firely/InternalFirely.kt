@@ -28,6 +28,8 @@ import android.os.Bundle
 import androidx.preference.PreferenceManager
 import android.util.Log
 import com.google.firebase.FirebaseApp
+import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import java.util.concurrent.TimeUnit
@@ -117,7 +119,7 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
             }
     }
 
-    fun fetch() {
+    fun fetch(shouldForceFetch: Boolean = false) {
 
         var cacheExpiration = 7200L // 1 hour in seconds - 5 requests per hour limitation
 
@@ -128,7 +130,7 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
 
         // If in developer mode cacheExpiration is set to 0 so each fetch will retrieve values from
         // the server.
-        if (debugMode) {
+        if (debugMode || shouldForceFetch) {
             cacheExpiration = 0
         }
 
@@ -136,7 +138,8 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
         // fetched and cached config would be considered expired because it would have been fetched
         // more than cacheExpiration seconds ago. Thus the next fetch would go to the server unless
         // throttling is in progress. The default expiration duration is 43200 (12 hours).
-        firebaseRemoteConfig.fetch(cacheExpiration)
+        firebaseRemoteConfig
+            .fetch(cacheExpiration)
             .addOnCompleteListener { result ->
                 if (result.isSuccessful) {
                     if (Firely.logLevel().debugLogEnabled()) {
@@ -162,6 +165,10 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
         }
         firebaseRemoteConfig.activate()
         updateAllTrackingProperties()
+    }
+
+    fun addConfigUpdateListener(configUpdateListener: ConfigUpdateListener): ConfigUpdateListenerRegistration {
+        return firebaseRemoteConfig.addOnConfigUpdateListener(configUpdateListener)
     }
 
     private fun updateAllTrackingProperties() {

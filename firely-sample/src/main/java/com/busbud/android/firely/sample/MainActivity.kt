@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        featureFlag.observeRealTime(this)
+
         fetchDataAndUpdateTextView()
 
         findViewById<Button>(R.id.button).apply {

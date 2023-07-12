@@ -20,11 +20,27 @@
 
 package com.busbud.android.firely
 
+import android.util.Log
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
-class LiveVariable<T : Any>(name: String, internalConfig: InternalFirely, private val clazz: KClass<T>) :
-    Operation(name, internalConfig) {
+private const val TAG = "LiveVariable"
+
+class LiveVariable<T : Any>(
+    name: String,
+    internalConfig: InternalFirely,
+    private val clazz: KClass<T>
+) : Operation(name, internalConfig) {
 
     fun get(): T = when (clazz) {
         Boolean::class -> clazz.cast(internalFirely.getBoolean(name))
@@ -35,6 +51,30 @@ class LiveVariable<T : Any>(name: String, internalConfig: InternalFirely, privat
             // Not supported in Firebase so let's be crazy
             clazz.cast(Integer.valueOf(internalFirely.getString(name)))
         }
+
         else -> throw ClassCastException("Unsupported")
+    }
+
+    fun observeRealTime(lifecycleOwner: LifecycleOwner, onError: (() -> Unit)? = null) {
+        val listenerRegistration =
+            internalFirely.addConfigUpdateListener(object : ConfigUpdateListener {
+                override fun onUpdate(configUpdate: ConfigUpdate) {
+                    if (configUpdate.updatedKeys.contains(name)) {
+                        internalFirely.activateFetched()
+                    }
+                }
+
+                override fun onError(error: FirebaseRemoteConfigException) {
+                    Log.d(TAG, "Error observing remote configs", error)
+                    onError?.invoke()
+                }
+
+            })
+        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
+                listenerRegistration.remove()
+                super.onDestroy(owner)
+            }
+        })
     }
 }
