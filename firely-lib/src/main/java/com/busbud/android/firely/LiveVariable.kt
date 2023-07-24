@@ -22,15 +22,10 @@ package com.busbud.android.firely
 
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
-import com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
@@ -55,7 +50,10 @@ class LiveVariable<T : Any>(
         else -> throw ClassCastException("Unsupported")
     }
 
-    fun observeRealTime(lifecycleOwner: LifecycleOwner, onError: (() -> Unit)? = null) {
+    fun observeRealTime(
+        lifecycleOwner: LifecycleOwner,
+        onError: (() -> Unit)? = null
+    ): LiveVariableDisposable {
         val listenerRegistration =
             internalFirely.addConfigUpdateListener(object : ConfigUpdateListener {
                 override fun onUpdate(configUpdate: ConfigUpdate) {
@@ -76,5 +74,11 @@ class LiveVariable<T : Any>(
                 super.onDestroy(owner)
             }
         })
+
+        return object : LiveVariableDisposable {
+            override fun dispose() {
+                listenerRegistration.remove()
+            }
+        }
     }
 }
