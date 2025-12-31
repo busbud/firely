@@ -23,8 +23,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 
 android {
+    namespace 'com.busbud.android.firely'
     compileSdk compilesdk_version
-    buildToolsVersion = buildtools_version
 
     defaultConfig {
         minSdkVersion 16
@@ -40,8 +40,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
     }
 
     publishing {
@@ -51,17 +51,21 @@ android {
     }
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
-    implementation 'com.google.firebase:firebase-config-ktx:21.4.0'
+    implementation 'com.google.firebase:firebase-config-ktx:22.1.2'
     implementation "androidx.core:core-ktx:$corektx_version"
-    implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation "androidx.preference:preference-ktx:1.2.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.10.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-task sourceJar(type: Jar) {
+tasks.register('sourceJar', Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier "source"
+    archiveClassifier = "source"
 }
 
 publishing {
