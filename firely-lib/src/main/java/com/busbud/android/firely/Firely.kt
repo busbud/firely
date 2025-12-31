@@ -21,6 +21,7 @@
 package com.busbud.android.firely
 
 import android.content.Context
+import com.google.firebase.FirebaseOptions
 import kotlin.reflect.KClass
 
 object Firely {
@@ -28,7 +29,7 @@ object Firely {
     private var logLevel = LogLevel.NONE
     private lateinit var internal: InternalFirely
 
-    fun setup(context: Context) : Firely {
+    fun setup(context: Context, secondaryFirebaseAppOptions: FirebaseOptions? = null): Firely {
         // Find the auto-generated FirelyConfig
         val firelyConfig = try {
             Class.forName("com.busbud.android.firely.FirelyConfig").newInstance() as IFirelyConfig
@@ -38,9 +39,9 @@ object Firely {
 
         // Start remote config
         try {
-            internal = InternalFirely(context, firelyConfig)
+            internal = InternalFirely(context, firelyConfig, secondaryFirebaseAppOptions)
         } catch (e: Exception) {
-            throw  IllegalArgumentException("Unable to instantiate FirebaseRemoteConfig", e)
+            throw IllegalArgumentException("Unable to instantiate FirebaseRemoteConfig", e)
         }
 
         return this
@@ -103,7 +104,7 @@ object Firely {
     private fun <T : Any> variable(name: IFirelyItem, clazz: KClass<T>): LiveVariable<T> {
         checkSetupCalled()
         if (name.key.isEmpty()) {
-            throw  IllegalArgumentException("Empty variable")
+            throw IllegalArgumentException("Empty variable")
         }
         return LiveVariable(name.key, internal, clazz)
     }

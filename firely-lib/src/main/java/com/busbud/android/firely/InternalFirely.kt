@@ -27,18 +27,27 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.PreferenceManager
 import android.util.Log
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.initialize
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.firebase.remoteconfig.remoteConfig
 import java.util.concurrent.TimeUnit
 
 
 private val LOG_TAG = Firely::class.simpleName
 private const val SHARED_PREF_INITIAL_CHECK = "com.busbud.android.firely.initial_check"
+private const val SECONDARY_APP_NAME = "remoteConfigsApp"
 
-class InternalFirely(context: Context, private val config: IFirelyConfig) {
+class InternalFirely(
+    context: Context,
+    private val config: IFirelyConfig,
+    secondaryFirebaseAppOptions: FirebaseOptions? = null
+) {
 
     private val firebaseRemoteConfig: FirebaseRemoteConfig
     private val allPropsWithCurrentValue = mutableMapOf<String, String>()
@@ -46,8 +55,13 @@ class InternalFirely(context: Context, private val config: IFirelyConfig) {
     private var debugMode = false
 
     init {
-        FirebaseApp.initializeApp(context)
-        firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+        if (secondaryFirebaseAppOptions == null) {
+            firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+        } else {
+            Firebase.initialize(context, secondaryFirebaseAppOptions, SECONDARY_APP_NAME)
+            val secondaryApp = FirebaseApp.getInstance(SECONDARY_APP_NAME)
+            firebaseRemoteConfig = Firebase.remoteConfig(secondaryApp)
+        }
 
         (context.applicationContext as Application).registerActivityLifecycleCallbacks(object :
             Application.ActivityLifecycleCallbacks {
