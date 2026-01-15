@@ -17,31 +17,21 @@
  * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-//        mavenLocal()
-    }
-//    dependencies {
-//        classpath group: 'com.busbud.android', name: 'firely-plugin', version: "$lib_version"
-//    }
-}
-
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
-    id "com.busbud.android.firely" version "0.2.1"
+    id "com.busbud.android.firely" version "0.3.1"
 }
 
 android {
+    namespace 'com.busbud.android.firely.sample'
     compileSdk compilesdk_version
     buildToolsVersion = buildtools_version
 
     defaultConfig {
         applicationId "com.busbud.android.firely.sample"
-        minSdkVersion 16
+        minSdkVersion 23
         targetSdkVersion compilesdk_version
         versionCode 1
         versionName "1.0"
@@ -53,6 +43,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+    }
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -60,9 +61,10 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
     testImplementation 'junit:junit:4.13.2'
+    implementation 'com.google.firebase:firebase-config-ktx:22.1.2'
 
     implementation project(':firely-lib')
     implementation "androidx.core:core-ktx:$corektx_version"

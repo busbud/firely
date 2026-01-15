@@ -22,11 +22,28 @@ package com.busbud.android.firely.sample
 
 import android.app.Application
 import com.busbud.android.firely.Firely
+import com.google.firebase.FirebaseOptions
 
 class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        simpleSetup()
+//        differentFirebaseProjectSetup()
+    }
+
+    private fun simpleSetup() {
         Firely.setup(this).setDebugMode(BuildConfig.DEBUG)
+    }
+
+    private fun differentFirebaseProjectSetup() {
+        val firebaseOptions = FirebaseOptions.Builder()
+            .setProjectId("[SET-YOUR-PROJECT-ID-HERE]")
+            .setApplicationId("[SET-YOUR-APP-ID-HERE]")
+            .setApiKey("[SET-YOUR-API-KEY-HERE]")
+            .build()
+
+        Firely.setup(this, secondaryFirebaseAppOptions = firebaseOptions)
+            .setDebugMode(BuildConfig.DEBUG)
     }
 }

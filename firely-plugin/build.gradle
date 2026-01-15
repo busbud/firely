@@ -19,39 +19,35 @@
  */
 
 plugins {
-    id 'kotlin'
+    id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
-    id 'kotlinx-serialization'
-    id "com.gradle.plugin-publish" version "1.0.0"
+    id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'com.gradle.plugin-publish' version '1.3.0'
 }
 
 dependencies {
-    repositories {
-        mavenCentral()
-    }
-
     implementation gradleApi()
-    implementation "com.android.tools.build:gradle:$gradle_version"
     implementation 'com.squareup:kotlinpoet:1.11.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0'
 }
 
-tasks.withType(JavaCompile) {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-tasks.withType(GroovyCompile) {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+tasks.withType(GroovyCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+tasks.register('sourcesJar', Jar) {
+    dependsOn classes
     archiveClassifier.set("sources")
     from sourceSets.main.allSource
 }
 
-tasks.withType(Copy).all { duplicatesStrategy 'exclude' }
+tasks.withType(Copy).configureEach { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
 artifacts {
     archives sourcesJar
@@ -60,20 +56,17 @@ artifacts {
 version = "$lib_version"
 group = "com.busbud"
 
-pluginBundle {
-    website = 'https://github.com/busbud/firely'
-    vcsUrl = 'https://github.com/busbud/firely'
-    description = "Library to simplify the integration and management of A/B testing"
-    tags = ['firely', 'remote_configs', 'firebase']
-}
-
 
 gradlePlugin {
+    website = 'https://github.com/busbud/firely'
+    vcsUrl = 'https://github.com/busbud/firely'
     plugins {
         firelyPlugin {
             id = 'com.busbud.android.firely'
             implementationClass = 'com.busbud.android.firely.FirelyPlugin'
             displayName = "Firely Plugin"
+            description = "Library to simplify the integration and management of A/B testing"
+            tags = ['firely', 'remote_configs', 'firebase']
         }
     }
 }
