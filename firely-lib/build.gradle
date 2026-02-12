@@ -68,15 +68,15 @@ tasks.register('sourceJar', Jar) {
     archiveClassifier = "source"
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            firely(MavenPublication) {
-                groupId 'com.busbud.android'
-                artifactId 'firely'
-                version "$lib_version"
-                artifact(sourceJar)
-                artifact(bundleReleaseAar)
+publishing {
+    publications {
+        firely(MavenPublication) {
+            groupId 'com.busbud.android'
+            artifactId 'firely'
+            version "$lib_version"
+
+            afterEvaluate {
+                from components.release
             }
         }
     }
