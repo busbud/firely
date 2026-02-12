@@ -46,17 +46,11 @@ kotlin {
     jvmToolchain(17)
 }
 
-tasks.register('sourcesJar', Jar) {
-    dependsOn classes
-    archiveClassifier.set("sources")
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
 }
 
 tasks.withType(Copy).configureEach { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
-
-artifacts {
-    archives sourcesJar
-}
 
 version = "$lib_version"
 group = "com.busbud"
