@@ -74,8 +74,10 @@ publishing {
             groupId 'com.busbud.android'
             artifactId 'firely'
             version "$lib_version"
-            artifact(sourceJar)
-            artifact("$buildDir/outputs/aar/firely-lib-release.aar")
+
+            afterEvaluate {
+                from components.release
+            }
         }
     }
 }
