@@ -19,9 +19,9 @@
  */
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.jvm' version '2.3.0'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.3.0'
     id 'com.gradle.plugin-publish' version '1.3.0'
 }
 
@@ -52,7 +52,7 @@ java {
 
 tasks.withType(Copy).configureEach { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
-version = "$lib_version"
+version = libs.versions.lib.get()
 group = "com.busbud"
 
 
@@ -75,7 +75,7 @@ publishing {
         main(MavenPublication) {
             groupId 'com.busbud.android'
             artifactId 'firely-plugin'
-            version "$lib_version"
+            version libs.versions.lib.get()
 
             from components.java
         }
