@@ -19,6 +19,7 @@
  */
 
 pluginManagement {
+    includeBuild("firely-plugin")
     repositories {
         google()
         mavenCentral()
@@ -34,4 +35,4 @@ dependencyResolutionManagement {
     }
 }
 
-include ':firely-sample', ':firely-lib', ':firely-plugin'
+include ':firely-sample', ':firely-lib'

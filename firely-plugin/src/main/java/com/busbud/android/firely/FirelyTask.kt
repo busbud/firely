@@ -24,10 +24,11 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kotlinx.serialization.json.*
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import java.io.File
 import java.io.IOException
 
 /**
@@ -36,16 +37,18 @@ import java.io.IOException
 abstract class FirelyTask : DefaultTask() {
 
     @get:InputFile
-    abstract var inputFile: File
+    abstract val inputFile: RegularFileProperty
 
     @get:OutputDirectory
-    abstract var outputDir: File
+    abstract val outputDir: DirectoryProperty
 
     @TaskAction
     fun createFirelyConfig() {
-        val json = Json.parseToJsonElement(inputFile.readText()).jsonObject
+        val inputFileResolved = inputFile.get().asFile
+        val outputDirResolved = outputDir.get().asFile
+        val json = Json.parseToJsonElement(inputFileResolved.readText()).jsonObject
 
-        println("Parsing ${inputFile.path}")
+        println("Parsing ${inputFileResolved.path}")
 
         // Main class
         val configClassBuilder =
@@ -81,10 +84,10 @@ abstract class FirelyTask : DefaultTask() {
         )
         configClassBuilder.addFunction(allValuesMethodBuilder.build())
 
-        if (!outputDir.isDirectory() && !outputDir.mkdirs()) {
-            throw IOException("Could not create directory: $outputDir")
+        if (!outputDirResolved.isDirectory && !outputDirResolved.mkdirs()) {
+            throw IOException("Could not create directory: $outputDirResolved")
         }
-        println("Writing class in ${outputDir.path} :")
+        println("Writing class in ${outputDirResolved.path} :")
         val fileSpec = FileSpec.builder("com.busbud.android.firely", "FirelyConfig")
             .addType(
                 configClassBuilder
@@ -92,7 +95,7 @@ abstract class FirelyTask : DefaultTask() {
                     .build()
             )
             .build()
-        fileSpec.writeTo(outputDir)
+        fileSpec.writeTo(outputDirResolved)
     }
 
 

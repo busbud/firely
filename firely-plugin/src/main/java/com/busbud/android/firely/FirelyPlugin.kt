@@ -20,12 +20,11 @@
 
 package com.busbud.android.firely
 
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.api.BaseVariant
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import com.android.build.api.variant.Variant
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.UnknownDomainObjectException
 import java.io.File
 
 
@@ -38,19 +37,16 @@ private const val FILE_NAME = "firely-config.json"
 class FirelyPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        try {
-            project.extensions.getByType(AppExtension::class.java).applicationVariants.all { variant ->
-                addGeneratedSource(project, variant)
-            }
-        } catch (exception: UnknownDomainObjectException) {
-            project.extensions.getByType(LibraryExtension::class.java).libraryVariants.all { variant ->
-                addGeneratedSource(project, variant)
-            }
+        val androidComponents =
+            project.extensions.findByType(ApplicationAndroidComponentsExtension::class.java)
+                ?: project.extensions.getByType(LibraryAndroidComponentsExtension::class.java)
+
+        androidComponents.onVariants { variant ->
+            addGeneratedSource(project, variant)
         }
     }
 
-    private fun addGeneratedSource(project: Project, variant: BaseVariant) {
-        val sourceFolder = File(project.buildDir, "/generated/source/firely/${variant.dirName}")
+    private fun addGeneratedSource(project: Project, variant: Variant) {
         var configFile = File("${project.projectDir.absolutePath}/$FILE_NAME")
 
         if (!configFile.exists()) {
@@ -66,11 +62,9 @@ class FirelyPlugin : Plugin<Project> {
             "${TASK_NAME}${variant.name.replaceFirstChar { it.uppercaseChar() }}",
             FirelyTask::class.java
         ) { task ->
-            task.inputFile = configFile
-            task.outputDir = sourceFolder
+            task.inputFile.set(configFile)
         }
 
-        firelyTaskProvider.get().outputs.upToDateWhen { false }
-        variant.registerJavaGeneratingTask(firelyTaskProvider, sourceFolder)
+        variant.sources.java?.addGeneratedSourceDirectory(firelyTaskProvider, FirelyTask::outputDir)
     }
 }
