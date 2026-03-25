@@ -228,7 +228,7 @@ In order to do this you need to have access to this [account](https://plugins.gr
 - Bump the version of library
 - Run the following command (keys are available on the account):
 ```
-./gradlew publishPlugins -Pgradle.publish.key=<key> -Pgradle.publish.secret=<secret>
+./gradlew :firely-plugin:publishPlugins -Pgradle.publish.key=<key> -Pgradle.publish.secret=<secret>
 ```
 
 
